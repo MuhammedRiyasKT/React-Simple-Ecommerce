@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import './App.css'; 
+import Footer from './Components/Footer';
+import Home from './Pages/Home';
+import Cart from './Pages/Cart';
+import Wishlist from './Pages/Wishlist';
+import { Routes, Route } from 'react-router-dom';
+import View from './Pages/View';
+import { useDispatch } from 'react-redux';
+import { fetchProduct } from './Redux/productSlice';
+
+
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProduct()); // Fetch products when the app starts
+  }, [dispatch]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <>
+   
+
+   <Routes>
+    
+    <Route element={<Home/>} path='/'/>
+    <Route element={<Cart/>} path='/cart'/>
+    <Route element={<Wishlist/>} path='/wishlist'/>
+    <Route element={<View/>} path='/view/:id'/>
+  </Routes>
+
+
+  <Footer />
+   </>
   );
 }
 
