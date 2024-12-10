@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateQuantity, deleteCart, clearCart } from "../Redux/cartSlice";
-import { Form, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
 
@@ -20,9 +20,14 @@ function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleQuantityChange = (e, productId) => {
-    const newQuantity = parseInt(e.target.value, 10);
-    if (newQuantity >= 1) {
+  const handleIncrease = (productId, currentQuantity) => {
+    const newQuantity = currentQuantity + 1;
+    dispatch(updateQuantity({ id: productId, quantity: newQuantity }));
+  };
+
+  const handleDecrease = (productId, currentQuantity) => {
+    if (currentQuantity > 1) {
+      const newQuantity = currentQuantity - 1;
       dispatch(updateQuantity({ id: productId, quantity: newQuantity }));
     }
   };
@@ -60,14 +65,23 @@ function Cart() {
                     <p className="text-success mb-0">${item.price}</p>
                   </div>
 
-                  <Form.Control
-                    type="number"
-                    value={item.quantity}
-                    min="1"
-                    style={{ width: "80px" }}
-                    onChange={(e) => handleQuantityChange(e, item.id)}
-                    className="mb-3 mb-md-0"
-                  />
+                  <div className="d-flex align-items-center mb-3 mb-md-0">
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      onClick={() => handleDecrease(item.id, item.quantity)}
+                    >
+                      -
+                    </Button>
+                    <span className="px-3">{item.quantity}</span>
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      onClick={() => handleIncrease(item.id, item.quantity)}
+                    >
+                      +
+                    </Button>
+                  </div>
 
                   <p className="mb-3 mb-md-0 text-center ms-2">
                     ${item.totalPrice.toFixed(2)}
@@ -148,3 +162,9 @@ function Cart() {
 }
 
 export default Cart;
+
+
+  
+                   
+             
+               
